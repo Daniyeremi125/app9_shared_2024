@@ -1,7 +1,16 @@
+import 'package:app9_shared_2024/widgets/my_drawer_widget.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  bool _isDarkMode = false;
+  String? _selectedGender;
 
   @override
   Widget build(BuildContext context) {
@@ -11,82 +20,8 @@ class HomePage extends StatelessWidget {
           "Shared Preferences App",
         ),
       ),
-      drawer: Drawer(
-        child: Column(
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: NetworkImage(
-                      "https://images.pexels.com/photos/73873/star-clusters-rosette-nebula-star-galaxies-73873.jpeg"),
-                ),
-              ),
-              child: SizedBox(
-                width: double.infinity,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CircleAvatar(
-                      radius: 30.0,
-                      backgroundColor: Colors.white,
-                      backgroundImage: NetworkImage(
-                          "https://images.pexels.com/photos/712513/pexels-photo-712513.jpeg"),
-                    ),
-                    Text(
-                      "Dani Avendaño Vargas",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      "Administrador",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            //menu parecido al diceño...dani 2024
-           ListTile(
-              leading: Icon(Icons.person),
-              title: Text('My Profile'),
-              onTap: () {
-                // Acción al presionar "My Profile"
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.folder),
-              title: Text('Portfolio'),
-              onTap: () {
-                // Acción al presionar "Portfolio"
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.lock),
-              title: Text('Change Password'),
-              onTap: () {
-                // Acción al presionar "Change Password"
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.exit_to_app),
-              title: Text('Logout'),
-              onTap: () {
-                // Acción al presionar "Logout"
-              },
-            ),
-            
-          ],
-        ),
-      ),
+
+      drawer: MyDrawerWidget(),
 
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -118,9 +53,12 @@ class HomePage extends StatelessWidget {
               children: [
                 Text('Dark Mode'),
                 Switch(
-                  value: false,
-                  onChanged: (value) {
-                   
+                  value: _isDarkMode,
+                  onChanged: (bool value) {
+                    setState(() {
+                      _isDarkMode = value;
+                      // Aquí puedes agregar funcionalidad para cambiar el tema de la app
+                    });
                   },
                 ),
               ],
@@ -131,9 +69,11 @@ class HomePage extends StatelessWidget {
               title: Text('Male'),
               leading: Radio<String>(
                 value: 'Male',
-                groupValue: null,
+                groupValue: _selectedGender,
                 onChanged: (String? value) {
-                  
+                  setState(() {
+                    _selectedGender = value;
+                  });
                 },
               ),
             ),
@@ -141,9 +81,11 @@ class HomePage extends StatelessWidget {
               title: Text('Female'),
               leading: Radio<String>(
                 value: 'Female',
-                groupValue: null,
+                groupValue: _selectedGender,
                 onChanged: (String? value) {
-                  
+                  setState(() {
+                    _selectedGender = value;
+                  });
                 },
               ),
             ),
@@ -153,7 +95,10 @@ class HomePage extends StatelessWidget {
                 icon: Icon(Icons.save),
                 label: Text('Save data'),
                 onPressed: () {
-                  
+                  // Aquí puedes manejar la acción para guardar los datos
+                  // Ejemplo: guardar en SharedPreferences
+                  print('Dark Mode: $_isDarkMode');
+                  print('Gender: $_selectedGender');
                 },
               ),
             ),
@@ -163,6 +108,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-
-
- 
