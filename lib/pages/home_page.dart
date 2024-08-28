@@ -1,16 +1,26 @@
+import 'package:app9_shared_2024/utils/shared_global.dart';
 import 'package:app9_shared_2024/widgets/my_drawer_widget.dart';
+import 'package:flutter/widgets.dart';
+
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  bool _isDarkMode = false;
-  String? _selectedGender;
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  bool isDarkMode = false;
+  int gender = 1;
+
+  saveSharedPreferences() {
+    SharedGlobal().fullName = _fullNameController.text;
+    SharedGlobal().address = _addressController.text;
+
+    print("Guardando en shared preferences!!!");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,86 +30,90 @@ class _HomePageState extends State<HomePage> {
           "Shared Preferences App",
         ),
       ),
-
       drawer: MyDrawerWidget(),
-
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Configuración general',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              "Configuración General",
+              style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 16),
+            const SizedBox(
+              height: 12.0,
+            ),
             TextField(
+              controller: _fullNameController,
               decoration: InputDecoration(
-                labelText: 'Dani',
+                hintText: "Nombre completo",
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(
+              height: 12.0,
+            ),
             TextField(
+              controller: _addressController,
               decoration: InputDecoration(
-                labelText: 'Avendaño',
+                hintText: "Dirección actual",
               ),
             ),
-            SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Dark Mode'),
-                Switch(
-                  value: _isDarkMode,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _isDarkMode = value;
-                      // Aquí puedes agregar funcionalidad para cambiar el tema de la app
-                    });
-                  },
-                ),
-              ],
+            const SizedBox(
+              height: 12.0,
             ),
-            SizedBox(height: 16),
-            Text('Gender'),
-            ListTile(
-              title: Text('Male'),
-              leading: Radio<String>(
-                value: 'Male',
-                groupValue: _selectedGender,
-                onChanged: (String? value) {
-                  setState(() {
-                    _selectedGender = value;
-                  });
-                },
+            // Switch(value: true, onChanged: (bool value){}),
+            SwitchListTile(
+              value: isDarkMode,
+              onChanged: (bool value) {
+                isDarkMode = value;
+                setState(() {});
+              },
+              title: Text("Dark mode"),
+            ),
+            const SizedBox(
+              height: 12.0,
+            ),
+            Text(
+              "Gender",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            // Radio(value: 0, groupValue: 1, onChanged: (int? value){},),
+            RadioListTile(
+              value: 1,
+              groupValue: gender,
+              onChanged: (int? value) {
+                gender = value!;
+                setState(() {});
+              },
+              title: Text("Male"),
+            ),
+            RadioListTile(
+              value: 2,
+              groupValue: gender,
+              onChanged: (int? value) {
+                gender = value!;
+                setState(() {});
+              },
+              title: Text("Female"),
+            ),
+            const SizedBox(
+              height: 12.0,
+            ),
+            ElevatedButton.icon(
+              onPressed: () {
+                saveSharedPreferences();
+              },
+              icon: Icon(
+                Icons.save,
+                color: Colors.white,
               ),
-            ),
-            ListTile(
-              title: Text('Female'),
-              leading: Radio<String>(
-                value: 'Female',
-                groupValue: _selectedGender,
-                onChanged: (String? value) {
-                  setState(() {
-                    _selectedGender = value;
-                  });
-                },
+              label: Text(
+                "Save Data",
+                style: TextStyle(color: Colors.white),
               ),
-            ),
-            SizedBox(height: 16),
-            Center(
-              child: ElevatedButton.icon(
-                icon: Icon(Icons.save),
-                label: Text('Save data'),
-                onPressed: () {
-                  // Aquí puedes manejar la acción para guardar los datos
-                  // Ejemplo: guardar en SharedPreferences
-                  print('Dark Mode: $_isDarkMode');
-                  print('Gender: $_selectedGender');
-                },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                minimumSize: Size(double.infinity, 50),
               ),
             ),
           ],
